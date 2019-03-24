@@ -8,9 +8,7 @@ from queso import create_cli, call_command
 from .utils import override_env
 
 
-def test_init_custom_commands_in_dir(runner, tmpdir):
-    cli = create_cli()
-
+def test_init_custom_commands_in_dir(cli, runner, tmpdir):
     result = runner.invoke(cli, ["init:custom", "-d", str(tmpdir)])
     output = result.output.lower()
 
