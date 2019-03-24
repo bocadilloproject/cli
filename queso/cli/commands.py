@@ -5,7 +5,7 @@ import click
 
 try:
     from uvicorn import main as uvicorn_command
-except ImportError:
+except ImportError:  # pragma: no cover
     uvicorn_command = None
 
 from queso import scaffold

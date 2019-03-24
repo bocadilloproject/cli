@@ -13,4 +13,5 @@ omit =
     setup.py
     tests/*
     queso/scaffolding/*
-    _*.py
+    debug/*
+
