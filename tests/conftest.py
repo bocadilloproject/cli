@@ -1,7 +1,3 @@
-import os
-
-os.environ["TESTING"] = "TRUE"
-
 import pytest
 from click.testing import CliRunner
 
