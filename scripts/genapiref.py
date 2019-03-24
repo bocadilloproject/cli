@@ -4,6 +4,7 @@ import subprocess
 from glob import glob
 from typing import List
 from os.path import join
+from inspect import cleandoc
 
 import yaml
 
@@ -46,10 +47,9 @@ def main():
         _text(get_help(["queso"]))
 
         _header(3, "Built-in commands")
-        for name in sorted(cli.commands.keys()):
-            command = cli.commands[name]
+        for name in cli.commands.keys():
             _header(4, name)
-            _text("\n".join([command.__doc__ or "", get_help(["queso", name])]))
+            _text(get_help(["queso", name]))
 
         _header(2, "Python modules")
         for path in sorted(glob(join(api_ref_dir, "*.md"))):

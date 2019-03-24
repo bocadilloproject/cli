@@ -13,10 +13,25 @@ from queso.commands import CustomCommandsGroup, command, Command
 from queso.versions import get_versions
 
 
-@command()
-def version():
-    """Show version information and exit."""
-    click.echo(str(get_versions()))
+class ServeCommand(Command):
+    include_options_metavar = False
+
+    def format_options(self, ctx, formatter):
+        return click.Command.format_options(uvicorn_command, ctx, formatter)
+
+
+@command(cls=ServeCommand)
+@click.argument("app", required=False, default="app:app")
+@click.argument("uvicorn_options", nargs=-1, type=click.UNPROCESSED)
+def serve(app, uvicorn_options: Tuple[str]):
+    """Start a uvicorn server for `app:app`.
+
+    Use `APP` to customize the app location.
+    
+    uvicorn options must be separated with a `--` marker.
+    """
+    assert uvicorn_command is not None, "uvicorn must be installed"
+    uvicorn_command.main([app, *uvicorn_options])
 
 
 @command(name="init:custom")
@@ -31,20 +46,8 @@ def init_custom(directory: str):
     click.echo("Open the file and start building!")
 
 
-class ServeCommand(Command):
-    include_options_metavar = False
+@command()
+def version():
+    """Show version information and exit."""
+    click.echo(str(get_versions()))
 
-    def format_options(self, ctx, formatter):
-        return click.Command.format_options(uvicorn_command, ctx, formatter)
-
-
-@command(cls=ServeCommand)
-@click.argument("app", required=False, default="app:app")
-@click.argument("uvicorn_options", nargs=-1, type=click.UNPROCESSED)
-def serve(app, uvicorn_options: Tuple[str]):
-    """Start a uvicorn server for APP [default: app:app].
-
-    Note: uvicorn options must be separated with a `--` marker.
-    """
-    assert uvicorn_command is not None, "uvicorn must be installed"
-    uvicorn_command.main([app, *uvicorn_options])
